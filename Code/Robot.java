@@ -96,11 +96,12 @@ public class Robot {
         }
         else {
             if (!parcelle.isPresence_robot() && parcelle.getLieu().getType_Lieu() != Lieu.Type_Lieu.PLAN_D_EAU) {
+                this.parcelle=parcelle;
                 // Indiquer la présence du robot dans la nouvelle parcelle
                 parcelle.setRobot(this);
                 parcelle.setPresence_robot(true);
                 //Changer ou faire apparaitre le nom du robot dans la nouvelle parcelle
-                this.getParcelle().setCasesLieuOuRobot(true, new String[]{"R", String.valueOf(this.numero)});
+                this.parcelle.setCasesLieuOuRobot(true, new String[]{"R", String.valueOf(this.numero)});
             } else if ((parcelle.getLieu().getType_Lieu() == Lieu.Type_Lieu.PLAN_D_EAU)) {
                 System.out.println("La parcelle désignée est un plan d'eau!");
             } else {

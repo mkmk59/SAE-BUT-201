@@ -3,7 +3,7 @@ import java.util.Random;
 public class Entrepot extends Lieu{
 
     /* Attribut */
-    private int numer22o;
+    private int numero;
     private String nom;
     private Robot.Specialite specialite;
     private int quantite_minerai_actuelle;

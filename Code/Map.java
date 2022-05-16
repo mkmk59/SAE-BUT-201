@@ -23,6 +23,11 @@ public class Map
     }
 
     /* Méthodes */
+    public void afficherMapConsole()
+    {
+       // A coder
+    }
+
     public void afficherMap()
     {
         // A coder //

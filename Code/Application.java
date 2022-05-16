@@ -7,6 +7,8 @@ public class Application
         System.out.println(robot1);
         System.out.println(carte.getMonde()[robot1.getParcelle().getCoordonnees()[0]][robot1.getParcelle().getCoordonnees()[1]]);
         System.out.println("*******************************************************************");
+
+
         /* carte.afficherMap();*/
     }
 }
