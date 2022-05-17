@@ -109,6 +109,18 @@ public class Parcelle {
 
     public void setMap(Map map) {this.map = map;}
 
+    public void afficherBordureHauteParcelle(){
+        System.out.print(" ͟͟͟ ");
+    }
+    public void afficherLieuParcelle(){
+        System.out.print("│ "+this.cases[0][0]+this.cases[0][1]+" │");
+    }
+
+    public void afficherRobotParcelle(){
+        System.out.print("│ "+this.cases[1][0]+this.cases[1][1]+" │");
+    }
+
+
     public String toString(){
         return "Coordonnée : ("+this.getCoordonnees()[0]+":"+this.getCoordonnees()[1]+")"
                 +"\n | Robot : "+this.getRobot().getNom();

@@ -242,53 +242,51 @@ public class Robot {
     }
 
     public void collecter(){
-        // Vérifier la présence d'une parcelle attachée au robot
-        if (this.parcelle==null){
-            System.out.println("Le robot n'est pas sur la carte!");
-        }
-        // Vérifier que la parcelle n'est pas vide
-        else if(this.parcelle.getLieu()==null){
-            System.out.println("Il n'y a pas de mine sur cette parcelle!");
-        }
-        // Vérifier que la parcelle contient une mine et non un entrepôt.
-        else if (this.parcelle.getLieu().getType_Lieu()==Lieu.Type_Lieu.ENTREPOT){
-            System.out.println("Attention vous ne pouvez pas récolter depuis un Entrepôt!");
-        }
-        else if(this.parcelle.getLieu().getType_Lieu() == Lieu.Type_Lieu.MINE){
-            Mine mine = (Mine) this.parcelle.getLieu();
-            //Vérifier que les spécialités conïncident
-            if (this.specialite != mine.getSpecialite()){
-                System.out.println("Type de minerai imcompatible :" +
-                        "\n|| Specialité du Robot = " + this.specialite +
-                        "\n|| Spécialité de la Mine = " + mine.getSpecialite());
+        if (this.nombre_action==0) {
+            // Vérifier la présence d'une parcelle attachée au robot
+            if (this.parcelle == null) {
+                System.out.println("Le robot n'est pas sur la carte!");
             }
-            else if (mine.getQuantite_minerai_restant()>=this.capacite_extraction){
-                // Vérifier la capacité restante dans le robot
-                int capacite_restante_robot=this.capacite_minerai_max -this.quantite_minerai;
-                if (capacite_restante_robot<this.capacite_extraction)
-                {
-                    this.setQuantite_minerai(capacite_restante_robot);
-                    mine.setQuantite_minerai_restant(mine.getQuantite_minerai_restant() - capacite_restante_robot);
-                }
-                else
-                {
-                    this.setQuantite_minerai(this.capacite_extraction);
-                    mine.setQuantite_minerai_restant(mine.getQuantite_minerai_restant() - this.capacite_extraction);
+            // Vérifier que la parcelle n'est pas vide
+            else if (this.parcelle.getLieu() == null) {
+                System.out.println("Il n'y a pas de mine sur cette parcelle!");
+            }
+            // Vérifier que la parcelle contient une mine et non un entrepôt.
+            else if (this.parcelle.getLieu().getType_Lieu() == Lieu.Type_Lieu.ENTREPOT) {
+                System.out.println("Attention vous ne pouvez pas récolter depuis un Entrepôt!");
+            } else if (this.parcelle.getLieu().getType_Lieu() == Lieu.Type_Lieu.MINE)
+            {
+                Mine mine = (Mine) this.parcelle.getLieu();
+                //Vérifier que les spécialités conïncident
+
+                if (this.specialite != mine.getSpecialite()) {
+                    System.out.println("Type de minerai imcompatible :" +
+                            "\n|| Specialité du Robot = " + this.specialite +
+                            "\n|| Spécialité de la Mine = " + mine.getSpecialite());
+                } else if (mine.getQuantite_minerai_restant() >= this.capacite_extraction) {
+                    // Vérifier la capacité restante dans le robot
+                    int capacite_restante_robot = this.capacite_minerai_max - this.quantite_minerai;
+                    if (capacite_restante_robot < this.capacite_extraction) {
+                        this.setQuantite_minerai(capacite_restante_robot);
+                        mine.setQuantite_minerai_restant(mine.getQuantite_minerai_restant() - capacite_restante_robot);
+                    } else {
+                        this.setQuantite_minerai(this.capacite_extraction);
+                        mine.setQuantite_minerai_restant(mine.getQuantite_minerai_restant() - this.capacite_extraction);
+                    }
+                } else if (mine.getQuantite_minerai_restant() < this.capacite_extraction) {
+                    // Vérifier la capacité restante dans le robot
+                    int capacite_restante_robot = this.capacite_minerai_max - this.quantite_minerai;
+                    if (capacite_restante_robot < mine.getQuantite_minerai_restant()) {
+                        this.setQuantite_minerai(capacite_restante_robot);
+                        mine.setQuantite_minerai_restant(mine.getQuantite_minerai_restant() - capacite_restante_robot);
+                    } else {
+                        this.setQuantite_minerai(mine.getQuantite_minerai_restant());
+                        mine.setQuantite_minerai_restant(0);
+                    }
                 }
             }
-            else if (mine.getQuantite_minerai_restant()<this.capacite_extraction){
-                // Vérifier la capacité restante dans le robot
-                int capacite_restante_robot=this.capacite_minerai_max -this.quantite_minerai;
-                if (capacite_restante_robot<mine.getQuantite_minerai_restant())
-                {
-                    this.setQuantite_minerai(capacite_restante_robot);
-                    mine.setQuantite_minerai_restant(mine.getQuantite_minerai_restant() - capacite_restante_robot);
-                }
-                else
-                {
-                    this.setQuantite_minerai(mine.getQuantite_minerai_restant());
-                    mine.setQuantite_minerai_restant(0);
-                }
+            else {
+                System.out.println("Nombre maximal d'action atteint!");
             }
         }
     }
