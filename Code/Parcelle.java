@@ -120,6 +120,11 @@ public class Parcelle {
         System.out.print("│ "+this.cases[1][0]+this.cases[1][1]+" │");
     }
 
+    public void libererParcelleRobot(){
+        this.robot=null;
+        this.setPresence_robot(false);
+        this.setCasesLieuOuRobot(true,new String[] {" "," "});
+    }
 
     public String toString(){
         return "Coordonnée : ("+this.getCoordonnees()[0]+":"+this.getCoordonnees()[1]+")"

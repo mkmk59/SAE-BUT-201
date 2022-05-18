@@ -22,16 +22,15 @@ public class Mine extends Lieu{
         this.quantite_minerai_restant=this.quantite_minerai_max;
     }
 
-    public Mine(int numero, Robot.Specialite specialite, int quantite_minerai_restant,
-                int quantite_minerai_max,Parcelle parcelle)
+    public Mine(int numero, Robot.Specialite specialite,int quantite_minerai_max)
     {
         super();
         this.numero = numero;
         this.nom = "M"+this.numero;
         this.specialite = specialite;
-        this.quantite_minerai_restant = quantite_minerai_restant;
         this.quantite_minerai_max = quantite_minerai_max;
-        this.parcelle=parcelle;
+        this.quantite_minerai_restant = quantite_minerai_max;
+        this.parcelle=null;
         this.type_Lieu=Type_Lieu.MINE;
     }
 
@@ -44,16 +43,19 @@ public class Mine extends Lieu{
         return this.nom;
     }
 
-    public void setParcelle(Parcelle parcelle) {
+    public boolean setParcelle(Parcelle parcelle) {
         if (this.parcelle != null) {
             System.out.println("Cette mine est déjà placé sur la carte!");
+            return false;
         }
         else if (!parcelle.isPresence_lieu()) {
             this.parcelle = parcelle;
             this.parcelle.setPresence_lieu(true);
             this.parcelle.setLieu(this);
-            this.getParcelle().setCasesLieuOuRobot(false, new String[] {"M",String.valueOf(this.numero)});
+            this.parcelle.setCasesLieuOuRobot(false, new String[] {"M",String.valueOf(this.numero)});
+            return true;
         }
+        return false;
     }
 
     public void setSpecialite(Robot.Specialite type_mine) {
@@ -78,6 +80,15 @@ public class Mine extends Lieu{
 
     public int getQuantite_minerai_max() {
         return this.quantite_minerai_max;
+    }
+
+    public Boolean estVide(){
+        if (this.quantite_minerai_restant==0){
+            return Boolean.TRUE;
+        }
+        else{
+            return Boolean.FALSE;
+        }
     }
 
 }

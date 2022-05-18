@@ -10,12 +10,13 @@ public class Entrepot extends Lieu{
     private int capacite_stockage;
 
     /* Constructor */
-    public Entrepot(int numero) {
+    public Entrepot(int numero, Robot.Specialite specialite) {
         super();
         this.numero = numero;
         this.nom = "E"+this.numero;
         this.type_Lieu = Type_Lieu.ENTREPOT;
         this.parcelle = null;
+        this.specialite=specialite;
         Random generateur = new Random();
         this.capacite_stockage=generateur.nextInt(50,101);
         this.quantite_minerai_actuelle=0;
@@ -30,16 +31,19 @@ public class Entrepot extends Lieu{
         return this.nom;
     }
 
-    public void setParcelle(Parcelle parcelle) {
+    public boolean setParcelle(Parcelle parcelle) {
         if (this.parcelle != null) {
             System.out.println("Cette entrepôt est déjà placé sur la carte!");
+            return false;
         }
         else if (!parcelle.isPresence_lieu()) {
             this.parcelle = parcelle;
             this.parcelle.setPresence_lieu(true);
             this.parcelle.setLieu(this);
-            this.getParcelle().setCasesLieuOuRobot(false, new String[]{"E",String.valueOf(this.numero)});
+            this.parcelle.setCasesLieuOuRobot(false, new String[]{"E",String.valueOf(this.numero)});
+            return true;
         }
+        return false;
     }
 
     public Robot.Specialite getSpecialite() {
@@ -55,7 +59,7 @@ public class Entrepot extends Lieu{
     }
 
     public void setType_entrepot(Type_Lieu type_lieu) {
-        this.type_Lieu = type_Lieu;
+        this.type_Lieu = type_lieu;
     }
 
     public void setQuantite_minerai_actuelle(int quantite_minerai_actuelle) {
@@ -66,5 +70,12 @@ public class Entrepot extends Lieu{
         this.capacite_stockage = capacite_stockage;
     }
 
-
+    public Boolean estPlein(){
+        if (this.quantite_minerai_actuelle==this.capacite_stockage){
+            return Boolean.TRUE;
+        }
+        else {
+            return Boolean.FALSE;
+        }
+    }
 }
