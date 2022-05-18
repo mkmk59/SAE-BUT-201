@@ -243,7 +243,7 @@ public class Robot {
                 return false;
             }
             // Vérifier que la parcelle contient un entrepôt et non une mine.
-            else if (this.parcelle.getLieu().getType_Lieu() != Lieu.Type_Lieu.MINE) {
+            else if (this.parcelle.getLieu().getType_Lieu() == Lieu.Type_Lieu.MINE) {
                 System.out.println("Attention vous ne pouvez pas déposer dans une mine!");
                 return false;
             } else if (this.parcelle.getLieu().getType_Lieu() == Lieu.Type_Lieu.ENTREPOT) {
@@ -309,12 +309,12 @@ public class Robot {
                         // Vérifier la capacité restante dans le robot
                         int capacite_restante_robot = this.capacite_minerai_max - this.quantite_minerai;
                         if (capacite_restante_robot < this.capacite_extraction) {
-                            this.setQuantite_minerai(capacite_restante_robot);
+                            this.setQuantite_minerai(this.quantite_minerai+capacite_restante_robot);
                             mine.setQuantite_minerai_restant(mine.getQuantite_minerai_restant() - capacite_restante_robot);
                             this.setNombre_action(1);
                             return true;
                         } else {
-                            this.setQuantite_minerai(this.capacite_extraction);
+                            this.setQuantite_minerai(this.quantite_minerai + this.capacite_extraction);
                             mine.setQuantite_minerai_restant(mine.getQuantite_minerai_restant() - this.capacite_extraction);
                             this.setNombre_action(1);
                             return true;
@@ -323,12 +323,12 @@ public class Robot {
                         // Vérifier la capacité restante dans le robot
                         int capacite_restante_robot = this.capacite_minerai_max - this.quantite_minerai;
                         if (capacite_restante_robot < mine.getQuantite_minerai_restant()) {
-                            this.setQuantite_minerai(capacite_restante_robot);
+                            this.setQuantite_minerai(this.quantite_minerai + capacite_restante_robot);
                             mine.setQuantite_minerai_restant(mine.getQuantite_minerai_restant() - capacite_restante_robot);
                             this.setNombre_action(1);
                             return true;
                         } else {
-                            this.setQuantite_minerai(mine.getQuantite_minerai_restant());
+                            this.setQuantite_minerai(this.quantite_minerai+mine.getQuantite_minerai_restant());
                             mine.setQuantite_minerai_restant(0);
                             this.setNombre_action(1);
                             return true;
