@@ -128,17 +128,8 @@ public class Game extends Stage {
 
         //Bouton commandes
         Button info_commandes = new Button("Commandes");
-        info_commandes.setPrefSize(200, 30);
-        info_commandes.setFont(Font.font("Century Gothic", FontWeight.BOLD,15));
-        // background bouton commandes
-        File file_fond_bouton = new File("src/image/bouton_fond.png");
-        Image img_fond_bouton = new Image(file_fond_bouton.toURI().toString());
-        BackgroundImage image_jouer = new BackgroundImage(img_fond_bouton,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
-        //set du background a chaque boutons
-        info_commandes.setBackground(new Background(image_jouer));
+        info_commandes.setPrefSize(100, 30);
+
 
         File file_deposer = new File("src/image/deposer.png");
         Image deposer_img = new Image(file_deposer.toURI().toString());

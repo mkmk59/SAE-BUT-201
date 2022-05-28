@@ -91,7 +91,6 @@ public class Fenetre_commandes extends Stage {
 
         Button fermer = new Button("Fermer");
         fermer.setMaxWidth(200);
-        fermer.setFont(Font.font("Century Gothic", FontWeight.BOLD,15));
         fermer.setAlignment(Pos.CENTER);
 
         root_commandes.getChildren().addAll(titre, grid_touches, fermer);
@@ -103,15 +102,6 @@ public class Fenetre_commandes extends Stage {
         this.setTitle("Commandes de jeu");
         this.centerOnScreen();
 
-        // Background bouton
-        File file_fond_bouton = new File("src/image/bouton_fond.png");
-        Image img_fond_bouton = new Image(file_fond_bouton.toURI().toString());
-        BackgroundImage image_jouer = new BackgroundImage(img_fond_bouton,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
-        //set du background a chaque boutons
-        fermer.setBackground(new Background(image_jouer));
 
 
         //Evénements

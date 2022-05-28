@@ -107,7 +107,6 @@ public class Fenetre_Parametres extends Stage {
 
         Button appliquer = new Button("Appliquer");
         appliquer.setMaxWidth(200);
-        appliquer.setFont(Font.font("Century Gothic", FontWeight.BOLD,15));
         appliquer.setAlignment(Pos.CENTER);
 
         VBox root = new VBox();
@@ -122,15 +121,6 @@ public class Fenetre_Parametres extends Stage {
         this.centerOnScreen();
         this.setResizable(false);
 
-        // Background bouton
-        File file_fond_bouton = new File("src/image/bouton_fond.png");
-        Image img_fond_bouton = new Image(file_fond_bouton.toURI().toString());
-        BackgroundImage image_jouer = new BackgroundImage(img_fond_bouton,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
-        //set du background a chaque boutons
-        appliquer.setBackground(new Background(image_jouer));
 
 
         // Gestion des Evénement
