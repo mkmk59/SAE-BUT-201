@@ -1,3 +1,5 @@
+package com.example.java301fx;
+
 import java.util.Random;
 
 public class Entrepot extends Lieu{
@@ -33,14 +35,12 @@ public class Entrepot extends Lieu{
 
     public boolean setParcelle(Parcelle parcelle) {
         if (this.parcelle != null) {
-            System.out.println("Cette entrepôt est déjà placé sur la carte!");
             return false;
         }
         else if (!parcelle.isPresence_lieu()) {
             this.parcelle = parcelle;
             this.parcelle.setPresence_lieu(true);
             this.parcelle.setLieu(this);
-            this.parcelle.setCasesLieuOuRobot(false, new String[]{"E",String.valueOf(this.numero)});
             return true;
         }
         return false;

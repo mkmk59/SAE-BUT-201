@@ -1,6 +1,8 @@
+package com.example.java301fx;
+
 import java.util.Random;
 
-public class Mine extends Lieu{
+public class Mine extends Lieu {
     /* Attribut */
     private int numero;
     private String nom;
@@ -14,7 +16,7 @@ public class Mine extends Lieu{
         super();
         this.numero = numero;
         this.nom ="M"+this.numero;
-        this.type_Lieu = Type_Lieu.MINE;
+        this.type_Lieu = Lieu.Type_Lieu.MINE;
         this.parcelle = null;
         this.specialite=null;
         Random generateur = new Random();
@@ -31,7 +33,7 @@ public class Mine extends Lieu{
         this.quantite_minerai_max = quantite_minerai_max;
         this.quantite_minerai_restant = quantite_minerai_max;
         this.parcelle=null;
-        this.type_Lieu=Type_Lieu.MINE;
+        this.type_Lieu= Lieu.Type_Lieu.MINE;
     }
 
     /* Méthodes */
@@ -45,14 +47,12 @@ public class Mine extends Lieu{
 
     public boolean setParcelle(Parcelle parcelle) {
         if (this.parcelle != null) {
-            System.out.println("Cette mine est déjà placé sur la carte!");
             return false;
         }
         else if (!parcelle.isPresence_lieu()) {
             this.parcelle = parcelle;
             this.parcelle.setPresence_lieu(true);
             this.parcelle.setLieu(this);
-            this.parcelle.setCasesLieuOuRobot(false, new String[] {"M",String.valueOf(this.numero)});
             return true;
         }
         return false;

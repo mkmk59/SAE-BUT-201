@@ -1,58 +1,48 @@
+package com.example.java301fx;
+
 public class Parcelle {
     /* Attribut */
-    private int abscisse,ordonnee;
+    private int ligne, colonne;
     private boolean presence_lieu;
     private boolean presence_robot;
-    private String[][] cases;
     private Lieu lieu;
     private Robot robot;
     private Map map;
 
+    private ParcelleGUI parcelleGUI;
+
     /* Constructor */
     public Parcelle(int x, int y) {
-        this.abscisse=x;
-        this.ordonnee=y;
+        this.ligne=x;
+        this.colonne=y;
         this.presence_lieu = false;
         this.presence_robot = false;
         this.map = null;
         this.lieu = new Terrain_vide(this);
         this.robot = null;
-        this.cases=new String[][] {{" "," "},{" "," "}};
-    }
-
-    public Parcelle() {
-        this.abscisse=0;
-        this.ordonnee=0;
-        this.lieu = new Terrain_vide(this);
-        this.robot = null;
-        this.map = null;
-        this.presence_lieu = false;
-        this.presence_robot = false;
-        this.cases=new String[][] {{" "," "},{" "," "}};
+        this.parcelleGUI=new ParcelleGUI(this);
     }
 
     public Parcelle(Parcelle p) {
-        this.abscisse=p.abscisse;
-        this.ordonnee = p.ordonnee;
+        this.ligne =p.ligne;
+        this.colonne = p.colonne;
         this.lieu = p.lieu;
         this.robot = p.robot;
         this.map = p.map;
         this.presence_lieu = p.presence_lieu;
         this.presence_robot = p.presence_robot;
-        this.cases=p.cases;
+        this.parcelleGUI=p.parcelleGUI;
     }
 
     /* Méthodes */
     public int[] getCoordonnees() {
-        int[] pos=new int[] {this.abscisse,this.ordonnee};
+        int[] pos=new int[] {this.ligne,this.colonne};
         return pos;
     }
 
     public boolean isPresence_lieu() {
         return this.presence_lieu;
     }
-
-    public String[][] getCases() {return this.cases;}
 
     public boolean isPresence_robot() {
         return this.presence_robot;
@@ -62,25 +52,12 @@ public class Parcelle {
         this.presence_lieu = presence_lieu;
     }
 
-    public void setCases(String[][] cases) {
-        this.cases=cases;
-    }
-
-    public void setCasesLieuOuRobot(boolean choix_cases,String[] cases) {
-        if (!choix_cases) {
-            this.cases[0] = cases;
-        }
-        else{
-            this.cases[1] = cases;
-        }
-    }
-
     public void setPresence_robot(boolean presence_robot) {
         this.presence_robot = presence_robot;
     }
 
     public Lieu getLieu() {
-            return this.lieu;
+        return this.lieu;
     }
 
     public Robot getRobot() {
@@ -92,11 +69,11 @@ public class Parcelle {
     }
 
     public void setAbcisse(int a) {
-        this.abscisse = a;
+        this.ligne = a;
     }
 
-    public void setOrdonnee(int o){
-        this.ordonnee=o;
+    public void setColonne(int o){
+        this.colonne =o;
     }
 
     public void setLieu(Lieu lieu) {
@@ -109,25 +86,22 @@ public class Parcelle {
 
     public void setMap(Map map) {this.map = map;}
 
-    public void afficherBordureHauteParcelle(){
-        System.out.print(" ͟͟͟ ");
-    }
-    public void afficherLieuParcelle(){
-        System.out.print("│ "+this.cases[0][0]+this.cases[0][1]+" │");
-    }
-
-    public void afficherRobotParcelle(){
-        System.out.print("│ "+this.cases[1][0]+this.cases[1][1]+" │");
-    }
-
     public void libererParcelleRobot(){
         this.robot=null;
         this.setPresence_robot(false);
-        this.setCasesLieuOuRobot(true,new String[] {" "," "});
+        this.parcelleGUI.setRobotGUI(null);
     }
 
     public String toString(){
         return "Coordonnée : ("+this.getCoordonnees()[0]+":"+this.getCoordonnees()[1]+")"
                 +"\n | Robot : "+this.getRobot().getNom();
+    }
+
+    public void setParcelleGUI(ParcelleGUI parcelleGUI) {
+        this.parcelleGUI = parcelleGUI;
+    }
+
+    public ParcelleGUI getParcelleGUI() {
+        return this.parcelleGUI;
     }
 }

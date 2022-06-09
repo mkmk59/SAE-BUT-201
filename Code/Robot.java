@@ -1,3 +1,11 @@
+package com.example.java301fx;
+
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
+import java.io.File;
 import java.util.Random;
 
 public class Robot {
@@ -10,6 +18,7 @@ public class Robot {
     private Parcelle parcelle;
     private Map carte;
     private int nombre_action;
+    private RobotGUI robotGUI;
 
     public static <T extends Enum<?>> T randomEnum(Class<T> classe){
         Random generateur = new Random();
@@ -28,6 +37,7 @@ public class Robot {
         this.carte=null;
         this.parcelle=null;
         this.nombre_action=0;
+        this.robotGUI=new RobotGUI(this);
     }
 
     public Robot(int numero) {
@@ -41,6 +51,7 @@ public class Robot {
         this.carte=null;
         this.parcelle=null;
         this.nombre_action=0;
+        this.robotGUI=new RobotGUI(this);
     }
 
     public Robot(Robot robot) {
@@ -53,6 +64,7 @@ public class Robot {
         this.carte=robot.carte;
         this.parcelle=robot.parcelle;
         this.nombre_action=robot.nombre_action;
+        this.robotGUI=robot.robotGUI;
     }
 
     /* Méthodes */
@@ -62,6 +74,14 @@ public class Robot {
 
     public Specialite getSpecialite() {
         return this.specialite;
+    }
+
+    public RobotGUI getRobotGUI() {
+        return this.robotGUI;
+    }
+
+    public int getNumero() {
+        return this.numero;
     }
 
     public int getQuantite_minerai() {
@@ -91,7 +111,6 @@ public class Robot {
     public boolean setParcelle(Parcelle parcelle)
     {
         if (parcelle.getRobot()==this){
-            System.out.println("Le robot est déjà sur cette parcelle!");
             return false;
         }
         else {
@@ -104,16 +123,24 @@ public class Robot {
                 this.parcelle.setRobot(this);
                 this.parcelle.setPresence_robot(true);
                 //Changer ou faire apparaitre le nom du robot dans la nouvelle parcelle
-                this.parcelle.setCasesLieuOuRobot(true, new String[]{"R", String.valueOf(this.numero)});
+                this.parcelle.getParcelleGUI().setRobotGUI(this.robotGUI);
                 return true;
             } else if ((parcelle.getLieu().getType_Lieu() == Lieu.Type_Lieu.PLAN_D_EAU)) {
-                System.out.println("La parcelle désignée est un plan d'eau!");
+                Alert probleme_plan_deau = new Alert(Alert.AlertType.WARNING);
+                probleme_plan_deau.setTitle("Tentative de parcour d'un plan d'eau");
+                probleme_plan_deau.setContentText("Attention, plan d'eau !");
+                probleme_plan_deau.show();
                 return false;
-            } else {
-                System.out.println("La parcelle est déjà occupée par un autre robot!");
-                return false;
+            } else if (parcelle.isPresence_robot()){
+                // Ne pas afficher d'erreur à l'initialisation de la partie
+                    Alert parcelle_occupee = new Alert(Alert.AlertType.WARNING);
+                    parcelle_occupee.setTitle("Parcelle occupée");
+                    parcelle_occupee.setContentText("Attention, un robot est déjà présent sur la parcelle !");
+                    parcelle_occupee.show();
+                    return false;
             }
         }
+        return false;
     }
 
     public void setRandomParcelle(Map m)
@@ -152,25 +179,39 @@ public class Robot {
         this.capacite_extraction = capacite_extraction;
     }
 
-    public boolean Aller_en_bas()
-    {
+    public void setNumero(int numero) {
+        this.numero = numero;
+    }
+
+    public void setRobotGUI(RobotGUI robotGUI) {
+        this.robotGUI = robotGUI;
+    }
+
+    public boolean Aller_en_bas() {
         // Récupérer les coordonées de la parcelle de droite
-            int[] coor_parcelle_actuelle = this.getParcelle().getCoordonnees();
-            if(coor_parcelle_actuelle[0]<9 && this.nombre_action==0)
-            {
-                // On déplace le robot dans celle d'en bas
-                int[] coor_parcelle_bas = new int[] {coor_parcelle_actuelle[0] + 1,coor_parcelle_actuelle[1]};
-                Parcelle p_bas = this.getCarte().getParcelle(coor_parcelle_bas[0],coor_parcelle_bas[1]);
-                if (this.setParcelle(p_bas)) {
-                    this.setNombre_action(1);
-                    return true;
-                }
+        int[] coor_parcelle_actuelle = this.getParcelle().getCoordonnees();
+        if (coor_parcelle_actuelle[0] < 9 && this.nombre_action == 0) {
+            // On déplace le robot dans celle d'en bas
+            int[] coor_parcelle_bas = new int[]{coor_parcelle_actuelle[0] + 1, coor_parcelle_actuelle[1]};
+            Parcelle p_bas = this.getCarte().getParcelle(coor_parcelle_bas[0], coor_parcelle_bas[1]);
+            if (this.setParcelle(p_bas)) {
+                this.setNombre_action(1);
+                return true;
             }
-            else {
-                System.out.println("Vous ne pouvez pas aller en bas : Limite de la carte atteinte.");
-                return false;
-            }
+        } else if (coor_parcelle_actuelle[0] == 9) {
+            Alert limite_de_carte = new Alert(Alert.AlertType.WARNING);
+            limite_de_carte.setTitle("Limite de la carte atteinte.");
+            limite_de_carte.setContentText("Attention, limite de la carte atteinte !");
+            limite_de_carte.show();
             return false;
+        } else if (this.nombre_action == 1) {
+            Alert probleme_double_action = new Alert(Alert.AlertType.WARNING);
+            probleme_double_action.setTitle("Deuxième action du tour.");
+            probleme_double_action.setContentText("Attention, le robot " + this.getNom() + " a déjà effectué son action de jeu !");
+            probleme_double_action.show();
+            return false;
+        }
+        return false;
     }
 
     public boolean Aller_en_haut() {
@@ -183,9 +224,19 @@ public class Robot {
                 this.setNombre_action(1);
                 return true;
             }
-        } else {
-            System.out.println("Vous ne pouvez pas aller en haut : Limite de la carte atteinte.");
+        } else if (coor_parcelle_actuelle[0] == 0) {
+            Alert limite_de_carte = new Alert(Alert.AlertType.WARNING);
+            limite_de_carte.setTitle("Limite de la carte atteinte.");
+            limite_de_carte.setContentText("Attention, limite de la carte atteinte !");
+            limite_de_carte.show();
             return false;
+        } else if (this.nombre_action == 1) {
+            Alert probleme_double_action = new Alert(Alert.AlertType.WARNING);
+            probleme_double_action.setTitle("Deuxième action du tour.");
+            probleme_double_action.setContentText("Attention, le robot " + this.getNom() + " a déjà effectué son action de jeu !");
+            probleme_double_action.show();
+            return false;
+
         }
         return false;
     }
@@ -203,10 +254,20 @@ public class Robot {
                 return true;
             }
         }
-        else {
-            System.out.println("Vous ne pouvez pas aller à gauche: Limite de la carte atteinte.");
+        else if (coor_parcelle_actuelle[1]==0) {
+            Alert limite_de_carte = new Alert(Alert.AlertType.WARNING);
+            limite_de_carte.setTitle("Limite de la carte atteinte.");
+            limite_de_carte.setContentText("Attention, limite de la carte atteinte !");
+            limite_de_carte.show();
             return false;
         }
+        else if (this.nombre_action==1){
+        Alert probleme_double_action = new Alert(Alert.AlertType.WARNING);
+        probleme_double_action.setTitle("Deuxième action du tour.");
+        probleme_double_action.setContentText("Attention, le robot " + this.getNom() + " a déjà effectué son action de jeu !");
+        probleme_double_action.show();
+        return false;
+    }
         return false;
     }
 
@@ -223,61 +284,86 @@ public class Robot {
                 return true;
             }
         }
-        else {
-            System.out.println("Vous ne pouvez pas aller à droite : Limite de la carte atteinte.");
+        else if (coor_parcelle_actuelle[1]==9) {
+            Alert limite_de_carte = new Alert(Alert.AlertType.WARNING);
+            limite_de_carte.setTitle("Limite de la carte atteinte.");
+            limite_de_carte.setContentText("Attention, limite de la carte atteinte !");
+            limite_de_carte.show();
+            return false;
+        }
+        else if (this.nombre_action==1){
+            Alert probleme_double_action = new Alert(Alert.AlertType.WARNING);
+            probleme_double_action.setTitle("Deuxième action du tour.");
+            probleme_double_action.setContentText("Attention, le robot " + this.getNom() + " a déjà effectué son action de jeu !");
+            probleme_double_action.show();
             return false;
         }
         return false;
     }
 
-    public boolean deposer(){
+    public Boolean deposer(){
         if (this.nombre_action==0) {
             // Vérifier la présence d'une parcelle attachée au robot
             if (this.parcelle == null) {
-                System.out.println("Le robot n'est pas sur la carte!");
-                return false;
+                return  false;
             }
             // Vérifier que la parcelle n'est pas vide
             else if (this.parcelle.getLieu() instanceof Terrain_vide) {
-                System.out.println("Il n'y a pas d'entrepôt sur cette parcelle!");
-                return false;
+                Alert probleme_parcelle_sans_entrepot = new Alert(Alert.AlertType.WARNING);
+                probleme_parcelle_sans_entrepot.setTitle("Parcelle sans entrepôt.");
+                probleme_parcelle_sans_entrepot.setContentText("Attention, il n'y a pas d'entrepôt sur cette parcelle !");
+                probleme_parcelle_sans_entrepot.show();
+                return  false;
             }
             // Vérifier que la parcelle contient un entrepôt et non une mine.
             else if (this.parcelle.getLieu().getType_Lieu() == Lieu.Type_Lieu.MINE) {
-                System.out.println("Attention vous ne pouvez pas déposer dans une mine!");
-                return false;
+                Alert probleme_depot_mine = new Alert(Alert.AlertType.WARNING);
+                probleme_depot_mine.setTitle("Problème dépot dans mine.");
+                probleme_depot_mine.setContentText("Attention, un robot ne peut pas déposer dans une mine !");
+                probleme_depot_mine.show();
+                return  false;
             } else if (this.parcelle.getLieu().getType_Lieu() == Lieu.Type_Lieu.ENTREPOT) {
                 if (this.quantite_minerai == 0)
                 {
-                    System.out.println("Le robot est vide!");
-                    return false;
+                    Alert probleme_robot_vide = new Alert(Alert.AlertType.WARNING);
+                    probleme_robot_vide.setTitle("Robot vide.");
+                    probleme_robot_vide.setContentText("Attention, le robot " + this.getNom() + " est déjà vide !");
+                    probleme_robot_vide.show();
+                    return  false;
                 }
                 else
                 {
                     Entrepot entrepot = (Entrepot) this.parcelle.getLieu();
                     int capacite_restante_entrepot = entrepot.getCapacite_stockage() - entrepot.getQuantite_minerai_actuelle();
                     if (capacite_restante_entrepot == 0) {
-                        System.out.println("L'entrepôt " + entrepot.getNom() + "est plein !");
-                        return false;
+                        Alert probleme_entrepot_plein = new Alert(Alert.AlertType.WARNING);
+                        probleme_entrepot_plein.setTitle("Entrepôt plein.");
+                        probleme_entrepot_plein.setContentText("Attention, l'entrepôt "+entrepot.getNom()+" est déjà plein' !");
+                        probleme_entrepot_plein.show();
+                        return  false;
                     } else if (capacite_restante_entrepot < this.quantite_minerai) {
-                        this.setQuantite_minerai(this.quantite_minerai - capacite_restante_entrepot);
                         entrepot.setQuantite_minerai_actuelle(entrepot.getCapacite_stockage());
-                        return true;
+                        this.setQuantite_minerai(this.quantite_minerai - capacite_restante_entrepot);
+                        this.setNombre_action(1);
+                        return  true;
                     } else {
-                        this.setQuantite_minerai(0);
                         entrepot.setQuantite_minerai_actuelle(entrepot.getQuantite_minerai_actuelle() + this.getQuantite_minerai());
-                        return true;
+                        this.setQuantite_minerai(0);
+                        this.setNombre_action(1);
+                        return  true;
                     }
                 }
             }
         }
         else {
-            System.out.println("Le robot a déjà réalisé une action pendant ce tour!");
-            return false;
+            Alert probleme_double_action = new Alert(Alert.AlertType.WARNING);
+            probleme_double_action.setTitle("Deuxième action du tour.");
+            probleme_double_action.setContentText("Attention, le robot " + this.getNom() + " a déjà effectué son action de jeu !");
+            probleme_double_action.show();
+            return  false;
         }
-        return false;
+        return  false;
     }
-
     public boolean collecter(){
         if (this.nombre_action==0)
         {
@@ -285,26 +371,43 @@ public class Robot {
             {
                 // Vérifier la présence d'une parcelle attachée au robot
                 if (this.parcelle == null) {
-                    System.out.println("Le robot n'est pas sur la carte!");
                     return false;
                 }
                 // Vérifier que la parcelle n'est pas vide
                 else if (this.parcelle.getLieu() instanceof Terrain_vide) {
-                    System.out.println("Il n'y a pas de mine sur cette parcelle!");
+                    Alert probleme_parcelle_sans_mine = new Alert(Alert.AlertType.WARNING);
+                    probleme_parcelle_sans_mine.setTitle("Problème collecte sur terrain vide.");
+                    probleme_parcelle_sans_mine.setContentText("Attention, il n'y a pas de mine sur cette parcelle !");
+                    probleme_parcelle_sans_mine.show();
                     return false;
                 }
                 // Vérifier que la parcelle contient une mine et non un entrepôt.
                 else if (this.parcelle.getLieu().getType_Lieu() == Lieu.Type_Lieu.ENTREPOT) {
-                    System.out.println("Attention vous ne pouvez pas récolter depuis un Entrepôt!");
+                    Alert probleme_recolter_entrepot = new Alert(Alert.AlertType.WARNING);
+                    probleme_recolter_entrepot.setTitle("Récolte sur entrepôt.");
+                    probleme_recolter_entrepot.setContentText("Attention, le robot ne peut pas récolter depuis un entrepôt !");
+                    probleme_recolter_entrepot.show();
                     return false;
                 } else if (this.parcelle.getLieu().getType_Lieu() == Lieu.Type_Lieu.MINE) {
                     Mine mine = (Mine) this.parcelle.getLieu();
+
                     //Vérifier que les spécialités conïncident
                     if (this.specialite != mine.getSpecialite()) {
-                        System.out.println("Type de minerai imcompatible :" +
+                        Alert probleme_type_de_minerai = new Alert(Alert.AlertType.WARNING);
+                        probleme_type_de_minerai.setTitle("Problème de type de minerai.");
+                        probleme_type_de_minerai.setContentText("Types de minerai imcompatibles :" +
                                 "\n|| Specialité du Robot = " + this.specialite +
                                 "\n|| Spécialité de la Mine = " + mine.getSpecialite());
+                        probleme_type_de_minerai.show();
                         return false;
+                    }
+                    // Vérifier que la mine n'est pas vide
+                    else if (mine.getQuantite_minerai_restant()==0){
+                        Alert probleme_mine_vide = new Alert(Alert.AlertType.WARNING);
+                        probleme_mine_vide.setTitle("La mine " + mine.getNom() + " est pleine.");
+                        probleme_mine_vide.setContentText("Attention, la mine " + mine.getNom() + " est déjà vide.");
+                        probleme_mine_vide.show();
+                    // Vérifier en fonction de la quantité de minerai restant dans la mine
                     } else if (mine.getQuantite_minerai_restant() >= this.capacite_extraction) {
                         // Vérifier la capacité restante dans le robot
                         int capacite_restante_robot = this.capacite_minerai_max - this.quantite_minerai;
@@ -337,17 +440,24 @@ public class Robot {
                 }
             }
             else{
-                System.out.println("Le robot est déjà plein!");
+                Alert probleme_robot_plein = new Alert(Alert.AlertType.WARNING);
+                probleme_robot_plein.setTitle("Robot plein.");
+                probleme_robot_plein.setContentText("Attention, le robot " + this.getNom() + " est déjà plein !");
+                probleme_robot_plein.show();
                 return false;
             }
         }
         else {
-            System.out.println("Le robot a déjà réalisé une action pendant ce tour!");
+            Alert probleme_double_action = new Alert(Alert.AlertType.WARNING);
+            probleme_double_action.setTitle("Deuxième action du tour.");
+            probleme_double_action.setContentText("Attention, le robot a déjà effectué son action de jeu !");
+            probleme_double_action.show();
             return false;
         }
         return false;
     }
 
+    // méthode d'affichage sur console
     public String toString()
     {
         return  "Nom : " + this.getNom() + "\n| Spécialité : "+this.getSpecialite() + " \n| Parcelle : "
@@ -356,5 +466,17 @@ public class Robot {
                 + this.getCapacite_extraction()+"\n| Quantité de minerai actuelle : "  + this.getQuantite_minerai();
     }
 
+    public boolean equals(Object obj){
+        if (!(obj instanceof Robot)){
+            return false;
+        }
+        else {
+            if (this.getNom().equals(((Robot) obj).getNom())){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+    }
 }
-

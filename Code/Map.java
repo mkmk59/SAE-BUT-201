@@ -1,3 +1,5 @@
+package com.example.java301fx;
+
 public class Map
 {
     /* Attribut */
@@ -23,31 +25,6 @@ public class Map
     }
 
     /* Méthodes */
-    public void afficherMap()
-    {
-        int n=0;
-        while (n<this.monde.length-1){
-            System.out.print(" ͟͟͟͟");
-            n++;
-        }
-        System.out.print(" ͟͟͟͟ \n");
-        for(Parcelle[] ligne_parcelle : this.monde){
-            for (Parcelle p : ligne_parcelle){
-                System.out.print("│ "+p.getCases()[0][0]+p.getCases()[0][1]+" ");
-            }
-            System.out.print("│\n");
-            for (Parcelle p : ligne_parcelle){
-                System.out.print("│ "+p.getCases()[1][0]+p.getCases()[1][1]+" ");
-            }
-            System.out.print("│\n");
-            int lb=0;
-            while (lb<this.monde.length-1){
-                System.out.print(" ̅̅̅̅");
-                lb++;
-            }
-            System.out.print(" ̅̅̅̅\n");
-        }
-    }
 
     public Parcelle getParcelle(int x, int y)
     {
