@@ -1,4 +1,4 @@
-package com.example.java301fx;
+package com.example.sae_robots_mineur;
 
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -91,6 +91,7 @@ public class Fenetre_commandes extends Stage {
 
         Button fermer = new Button("Fermer");
         fermer.setMaxWidth(200);
+        fermer.setFont(Font.font("Century Gothic", FontWeight.BOLD,15));
         fermer.setAlignment(Pos.CENTER);
 
         root_commandes.getChildren().addAll(titre, grid_touches, fermer);
@@ -102,7 +103,17 @@ public class Fenetre_commandes extends Stage {
         this.setTitle("Commandes de jeu");
         this.centerOnScreen();
 
-
+        /*
+        // Background bouton
+        File file_fond_bouton = new File("src/image/fond_bouton.jpg");
+        Image img_fond_bouton = new Image(file_fond_bouton.toURI().toString());
+        BackgroundImage image_jouer = new BackgroundImage(img_fond_bouton,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+        //set du background a chaque boutons
+        fermer.setBackground(new Background(image_jouer));
+        */
 
         //Evénements
         fermer.setOnMouseClicked(event->{
