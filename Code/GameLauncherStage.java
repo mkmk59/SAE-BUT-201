@@ -1,4 +1,4 @@
-package com.example.java301fx;
+package com.example.sae_robots_mineur;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -56,7 +56,19 @@ public class GameLauncherStage extends Stage {
         this.setResizable(false);
         this.centerOnScreen();
 
-
+        /*
+        // Background des boutons
+        File file_fond_bouton = new File("src/image/fond_bouton.jpg");
+        Image img_fond_bouton = new Image(file_fond_bouton.toURI().toString());
+        BackgroundImage image_jouer = new BackgroundImage(img_fond_bouton,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+        //set du background a chaque boutons
+        jouer.setBackground(new Background(image_jouer));
+        parametres.setBackground(new Background(image_jouer));
+        commandes.setBackground(new Background(image_jouer));
+         */
 
         // Evénements
         GestionEventLauncher gestionEventLauncher = new GestionEventLauncher(this);
