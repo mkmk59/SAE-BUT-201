@@ -5,12 +5,10 @@
 ### Participant 👨‍🎓 :
 
 Khalil BOUCHAMA
-
 Ilies MIHOUBI
-
 Raphael GHARIBYAN
-
 Mark GYURJYAN
+
 --------------------------------------------------
 <h3 align="left">Language de Programmation:</h3>
 <p align="left"> <a href="https://www.java.com" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg" alt="java" width="40" height="40"/> </a> </p>
