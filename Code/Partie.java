@@ -1,4 +1,4 @@
-package com.example.java301fx;
+package com.example.sae_robots_mineur;
 
 import javafx.scene.control.Alert;
 
@@ -99,7 +99,7 @@ public class Partie {
                 tab_coor = new int[] {abs,ord};
             }
             liste_coordonnees_robot.add(tab_coor);
-            robot_Or.setParcelle(this.carte.getParcelle(abs, ord));
+            robot_Or.setParcelle(this.carte.getParcelle(abs, ord),false);
             nb_robot_Or_place++;
             this.robots.add(robot_Or);
         }
@@ -121,7 +121,7 @@ public class Partie {
                 tab_coor = new int[] {abs,ord};
             }
             liste_coordonnees_robot.add(tab_coor);
-            robot_Ni.setParcelle(this.carte.getParcelle(abs, ord));
+            robot_Ni.setParcelle(this.carte.getParcelle(abs, ord),false);
             nb_robot_Ni_place++;
             this.robots.add(robot_Ni);
         }
@@ -185,6 +185,26 @@ public class Partie {
         else{
             return false;
         }
+    }
+
+    public void setTour(int tour) {
+        this.tour = tour;
+    }
+
+    public void setCarte(Map carte) {
+        this.carte = carte;
+    }
+
+    public void setRobots(ArrayList<Robot> robots) {
+        this.robots = robots;
+    }
+
+    public void setMines(ArrayList<Mine> mines) {
+        this.mines = mines;
+    }
+
+    public void setEntrepots(ArrayList<Entrepot> entrepots) {
+        this.entrepots = entrepots;
     }
 
     public int getTour() {
