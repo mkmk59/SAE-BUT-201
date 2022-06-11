@@ -4,10 +4,10 @@
 
 ### Participant 👨‍🎓 :
 
-Khalil BOUCHAMA
-Ilies MIHOUBI
-Raphael GHARIBYAN
-Mark GYURJYAN
+- Khalil BOUCHAMA
+- Ilies MIHOUBI
+- Raphael GHARIBYAN
+- Mark GYURJYAN
 
 --------------------------------------------------
 <h3 align="left">Language de Programmation:</h3>
@@ -19,6 +19,7 @@ Mark GYURJYAN
 Le dossier Code - https://github.com/mkmk59/SAE-BUT-201/tree/main/Code 
 contient le jeu final avec un affichage en JavaFX.
 Des images sont dans le dossier image, elles seronts nécéssaire pour bien afficher le jeu - https://github.com/mkmk59/SAE-BUT-201/tree/main/Code/image
+Le dossier image devra se situer dans le dossier **sae_robot_mineur/src**
 
 Le dossier Code_affichage_console - https://github.com/mkmk59/SAE-BUT-201/tree/main/Code_affichage_console
 contient le jeu final avec un affichage console.
