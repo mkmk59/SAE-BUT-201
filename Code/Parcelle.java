@@ -1,4 +1,4 @@
-package com.example.java301fx;
+package com.example.sae_robots_mineur;
 
 public class Parcelle {
     /* Attribut */
@@ -21,6 +21,17 @@ public class Parcelle {
         this.lieu = new Terrain_vide(this);
         this.robot = null;
         this.parcelleGUI=new ParcelleGUI(this);
+    }
+
+    public Parcelle(int x, int y,ParcelleGUI parcelleGUI) {
+        this.ligne=x;
+        this.colonne=y;
+        this.presence_lieu = false;
+        this.presence_robot = false;
+        this.map = null;
+        this.lieu = new Terrain_vide(this);
+        this.robot = null;
+        this.parcelleGUI=parcelleGUI;
     }
 
     public Parcelle(Parcelle p) {
