@@ -1,4 +1,4 @@
-package com.example.java301fx;
+package com.example.sae_robots_mineur;
 
 import java.util.Random;
 
@@ -54,11 +54,9 @@ public class Entrepot extends Lieu{
         return this.quantite_minerai_actuelle;
     }
 
-
     public int getCapacite_stockage() {
         return this.capacite_stockage;
     }
-
 
     public void setType_entrepot(Type_Lieu type_lieu) {
         this.type_Lieu = type_lieu;
