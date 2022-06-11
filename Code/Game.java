@@ -1,4 +1,4 @@
-package com.example.java301fx;
+package com.example.sae_robots_mineur;
 
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -128,8 +128,20 @@ public class Game extends Stage {
 
         //Bouton commandes
         Button info_commandes = new Button("Commandes");
-        info_commandes.setPrefSize(100, 30);
+        info_commandes.setPrefSize(150,50);
+        info_commandes.setFont(Font.font("Century Gothic", FontWeight.BOLD,15));
 
+        /*
+        // background bouton commandes
+        File file_fond_bouton = new File("src/image/bouton_fond.png");
+        Image img_fond_bouton = new Image(file_fond_bouton.toURI().toString());
+        BackgroundImage image_jouer = new BackgroundImage(img_fond_bouton,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+        //set du background a chaque boutons
+        info_commandes.setBackground(new Background(image_jouer));
+         */
 
         File file_deposer = new File("src/image/deposer.png");
         Image deposer_img = new Image(file_deposer.toURI().toString());
@@ -161,7 +173,7 @@ public class Game extends Stage {
 
         bouttons.getChildren().addAll(bouttons_jeu,info_commandes);
         bouttons.setAlignment(Pos.CENTER);
-        bouttons.setSpacing(250);
+        bouttons.setSpacing(200);
 
         File file_mine_or = new File("src/image/image_launcher_robot_mineur_flou.png");
         Image img_background = new Image(file_mine_or.toURI().toString());
@@ -307,7 +319,7 @@ public class Game extends Stage {
         Pane paneInfoJeu = new Pane();
         GridPane informations_jeu = this.informations_jeu();
         paneInfoJeu.setMinSize(250, 90);
-        paneInfoJeu.setMaxSize(250, 480);
+        paneInfoJeu.setMaxSize(280, 480);
         changeFontLabelInsideGrid(informations_jeu,"Century Gothic",18,"#FFFFFF");
         paneInfoJeu.getChildren().add(informations_jeu);
         paneInfoJeu.setStyle("-fx-border-color: white; -fx-border-width: 10");
