@@ -1,4 +1,4 @@
-package com.example.java301fx;
+package com.example.sae_robots_mineur;
 
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.scene.control.Alert;
@@ -20,6 +20,7 @@ public class Robot {
     private int nombre_action;
     private RobotGUI robotGUI;
 
+    // Générateur aléatoire d'élements d'une classe enum
     public static <T extends Enum<?>> T randomEnum(Class<T> classe){
         Random generateur = new Random();
         int x = generateur.nextInt(classe.getEnumConstants().length);
@@ -38,6 +39,20 @@ public class Robot {
         this.parcelle=null;
         this.nombre_action=0;
         this.robotGUI=new RobotGUI(this);
+    }
+
+    public Robot(int numero,RobotGUI robotGUI) {
+        this.numero = numero;
+        Random generateur = new Random();
+        this.nom = "R"+this.numero;
+        this.specialite = randomEnum(Specialite.class);
+        this.quantite_minerai = 0;
+        this.capacite_minerai_max = generateur.nextInt(5,10);
+        this.capacite_extraction = generateur.nextInt(1,4);
+        this.carte=null;
+        this.parcelle=null;
+        this.nombre_action=0;
+        this.robotGUI=robotGUI;
     }
 
     public Robot(int numero) {
@@ -108,7 +123,7 @@ public class Robot {
         this.quantite_minerai = quantite_minerai;
     }
 
-    public boolean setParcelle(Parcelle parcelle)
+    public boolean setParcelle(Parcelle parcelle,boolean testmode)
     {
         if (parcelle.getRobot()==this){
             return false;
@@ -122,8 +137,11 @@ public class Robot {
                 // Indiquer la présence du robot dans la nouvelle parcelle
                 this.parcelle.setRobot(this);
                 this.parcelle.setPresence_robot(true);
-                //Changer ou faire apparaitre le nom du robot dans la nouvelle parcelle
-                this.parcelle.getParcelleGUI().setRobotGUI(this.robotGUI);
+
+                // Attacher l'interface graphique associée
+                if (testmode==false) {
+                    this.parcelle.getParcelleGUI().setRobotGUI(this.robotGUI);
+                }
                 return true;
             } else if ((parcelle.getLieu().getType_Lieu() == Lieu.Type_Lieu.PLAN_D_EAU)) {
                 Alert probleme_plan_deau = new Alert(Alert.AlertType.WARNING);
@@ -148,7 +166,7 @@ public class Robot {
         Random generateur = new Random();
         int x = generateur.nextInt(0,10);
         int y = generateur.nextInt(0,10);
-        this.setParcelle(m.getParcelle(x,y));
+        this.setParcelle(m.getParcelle(x,y),false);
     }
 
     public void setCarte(Map carte) {
@@ -194,7 +212,7 @@ public class Robot {
             // On déplace le robot dans celle d'en bas
             int[] coor_parcelle_bas = new int[]{coor_parcelle_actuelle[0] + 1, coor_parcelle_actuelle[1]};
             Parcelle p_bas = this.getCarte().getParcelle(coor_parcelle_bas[0], coor_parcelle_bas[1]);
-            if (this.setParcelle(p_bas)) {
+            if (this.setParcelle(p_bas,false)) {
                 this.setNombre_action(1);
                 return true;
             }
@@ -220,7 +238,7 @@ public class Robot {
             // On déplace le robot dans celle d'en haut
             int[] coor_parcelle_haut = new int[]{coor_parcelle_actuelle[0] - 1, coor_parcelle_actuelle[1]};
             Parcelle p_haut = this.getCarte().getParcelle(coor_parcelle_haut[0], coor_parcelle_haut[1]);
-            if (this.setParcelle(p_haut)) {
+            if (this.setParcelle(p_haut,false)) {
                 this.setNombre_action(1);
                 return true;
             }
@@ -249,7 +267,7 @@ public class Robot {
             // On déplace le robot dans celle de gauche
             int[] coor_parcelle_gauche = new int[] {coor_parcelle_actuelle[0],coor_parcelle_actuelle[1] - 1};
             Parcelle p_gauche = this.getCarte().getParcelle(coor_parcelle_gauche[0],coor_parcelle_gauche[1]);
-            if (this.setParcelle(p_gauche)) {
+            if (this.setParcelle(p_gauche,false)) {
                 this.setNombre_action(1);
                 return true;
             }
@@ -279,7 +297,7 @@ public class Robot {
             // On déplace le robot dans celle de droite
             int[] coor_parcelle_droite = new int[] {coor_parcelle_actuelle[0],coor_parcelle_actuelle[1] + 1};
             Parcelle p_droite = this.getCarte().getParcelle(coor_parcelle_droite[0],coor_parcelle_droite[1]);
-            if (this.setParcelle(p_droite)) {
+            if (this.setParcelle(p_droite,false)) {
                 this.setNombre_action(1);
                 return true;
             }
@@ -301,7 +319,7 @@ public class Robot {
         return false;
     }
 
-    public Boolean deposer(){
+    public Boolean deposer(boolean testmode){
         if (this.nombre_action==0) {
             // Vérifier la présence d'une parcelle attachée au robot
             if (this.parcelle == null) {
@@ -309,37 +327,56 @@ public class Robot {
             }
             // Vérifier que la parcelle n'est pas vide
             else if (this.parcelle.getLieu() instanceof Terrain_vide) {
-                Alert probleme_parcelle_sans_entrepot = new Alert(Alert.AlertType.WARNING);
-                probleme_parcelle_sans_entrepot.setTitle("Parcelle sans entrepôt.");
-                probleme_parcelle_sans_entrepot.setContentText("Attention, il n'y a pas d'entrepôt sur cette parcelle !");
-                probleme_parcelle_sans_entrepot.show();
+                if (testmode==false) {
+                    Alert probleme_parcelle_sans_entrepot = new Alert(Alert.AlertType.WARNING);
+                    probleme_parcelle_sans_entrepot.setTitle("Parcelle sans entrepôt.");
+                    probleme_parcelle_sans_entrepot.setContentText("Attention, il n'y a pas d'entrepôt sur cette parcelle !");
+                    probleme_parcelle_sans_entrepot.show();
+                }
                 return  false;
             }
             // Vérifier que la parcelle contient un entrepôt et non une mine.
             else if (this.parcelle.getLieu().getType_Lieu() == Lieu.Type_Lieu.MINE) {
-                Alert probleme_depot_mine = new Alert(Alert.AlertType.WARNING);
-                probleme_depot_mine.setTitle("Problème dépot dans mine.");
-                probleme_depot_mine.setContentText("Attention, un robot ne peut pas déposer dans une mine !");
-                probleme_depot_mine.show();
+                if (testmode==false) {
+                    Alert probleme_depot_mine = new Alert(Alert.AlertType.WARNING);
+                    probleme_depot_mine.setTitle("Problème dépot dans mine.");
+                    probleme_depot_mine.setContentText("Attention, un robot ne peut pas déposer dans une mine !");
+                    probleme_depot_mine.show();
+                }
                 return  false;
             } else if (this.parcelle.getLieu().getType_Lieu() == Lieu.Type_Lieu.ENTREPOT) {
                 if (this.quantite_minerai == 0)
                 {
-                    Alert probleme_robot_vide = new Alert(Alert.AlertType.WARNING);
-                    probleme_robot_vide.setTitle("Robot vide.");
-                    probleme_robot_vide.setContentText("Attention, le robot " + this.getNom() + " est déjà vide !");
-                    probleme_robot_vide.show();
+                    if (testmode==false) {
+                        Alert probleme_robot_vide = new Alert(Alert.AlertType.WARNING);
+                        probleme_robot_vide.setTitle("Robot vide.");
+                        probleme_robot_vide.setContentText("Attention, le robot " + this.getNom() + " est déjà vide !");
+                        probleme_robot_vide.show();
+                    }
                     return  false;
                 }
                 else
                 {
                     Entrepot entrepot = (Entrepot) this.parcelle.getLieu();
                     int capacite_restante_entrepot = entrepot.getCapacite_stockage() - entrepot.getQuantite_minerai_actuelle();
-                    if (capacite_restante_entrepot == 0) {
-                        Alert probleme_entrepot_plein = new Alert(Alert.AlertType.WARNING);
-                        probleme_entrepot_plein.setTitle("Entrepôt plein.");
-                        probleme_entrepot_plein.setContentText("Attention, l'entrepôt "+entrepot.getNom()+" est déjà plein' !");
-                        probleme_entrepot_plein.show();
+                    if (entrepot.getSpecialite()!=this.specialite){
+                        if (testmode==false) {
+                            Alert probleme_type_de_minerai = new Alert(Alert.AlertType.WARNING);
+                            probleme_type_de_minerai.setTitle("Problème de type de minerai.");
+                            probleme_type_de_minerai.setContentText("Types de minerai imcompatibles :" +
+                                    "\n|| Specialité du Robot = " + this.specialite +
+                                    "\n|| Spécialité de la Mine = " + entrepot.getSpecialite());
+                            probleme_type_de_minerai.show();
+                        }
+                        return false;
+                    }
+                    else if (capacite_restante_entrepot == 0) {
+                        if (testmode==false) {
+                            Alert probleme_entrepot_plein = new Alert(Alert.AlertType.WARNING);
+                            probleme_entrepot_plein.setTitle("Entrepôt plein.");
+                            probleme_entrepot_plein.setContentText("Attention, l'entrepôt " + entrepot.getNom() + " est déjà plein' !");
+                            probleme_entrepot_plein.show();
+                        }
                         return  false;
                     } else if (capacite_restante_entrepot < this.quantite_minerai) {
                         entrepot.setQuantite_minerai_actuelle(entrepot.getCapacite_stockage());
@@ -356,15 +393,17 @@ public class Robot {
             }
         }
         else {
-            Alert probleme_double_action = new Alert(Alert.AlertType.WARNING);
-            probleme_double_action.setTitle("Deuxième action du tour.");
-            probleme_double_action.setContentText("Attention, le robot " + this.getNom() + " a déjà effectué son action de jeu !");
-            probleme_double_action.show();
+            if (testmode==false) {
+                Alert probleme_double_action = new Alert(Alert.AlertType.WARNING);
+                probleme_double_action.setTitle("Deuxième action du tour.");
+                probleme_double_action.setContentText("Attention, le robot " + this.getNom() + " a déjà effectué son action de jeu !");
+                probleme_double_action.show();
+            }
             return  false;
         }
         return  false;
     }
-    public boolean collecter(){
+    public boolean collecter(boolean testmode){
         if (this.nombre_action==0)
         {
             if (this.quantite_minerai!=this.capacite_minerai_max)
@@ -375,40 +414,50 @@ public class Robot {
                 }
                 // Vérifier que la parcelle n'est pas vide
                 else if (this.parcelle.getLieu() instanceof Terrain_vide) {
-                    Alert probleme_parcelle_sans_mine = new Alert(Alert.AlertType.WARNING);
-                    probleme_parcelle_sans_mine.setTitle("Problème collecte sur terrain vide.");
-                    probleme_parcelle_sans_mine.setContentText("Attention, il n'y a pas de mine sur cette parcelle !");
-                    probleme_parcelle_sans_mine.show();
+                    if (testmode==false) {
+                        Alert probleme_parcelle_sans_mine = new Alert(Alert.AlertType.WARNING);
+                        probleme_parcelle_sans_mine.setTitle("Problème collecte sur terrain vide.");
+                        probleme_parcelle_sans_mine.setContentText("Attention, il n'y a pas de mine sur cette parcelle !");
+                        probleme_parcelle_sans_mine.show();
+                    }
                     return false;
                 }
                 // Vérifier que la parcelle contient une mine et non un entrepôt.
                 else if (this.parcelle.getLieu().getType_Lieu() == Lieu.Type_Lieu.ENTREPOT) {
-                    Alert probleme_recolter_entrepot = new Alert(Alert.AlertType.WARNING);
-                    probleme_recolter_entrepot.setTitle("Récolte sur entrepôt.");
-                    probleme_recolter_entrepot.setContentText("Attention, le robot ne peut pas récolter depuis un entrepôt !");
-                    probleme_recolter_entrepot.show();
+                    if (testmode==false) {
+                        Alert probleme_recolter_entrepot = new Alert(Alert.AlertType.WARNING);
+                        probleme_recolter_entrepot.setTitle("Récolte sur entrepôt.");
+                        probleme_recolter_entrepot.setContentText("Attention, le robot ne peut pas récolter depuis un entrepôt !");
+                        probleme_recolter_entrepot.show();
+                    }
                     return false;
-                } else if (this.parcelle.getLieu().getType_Lieu() == Lieu.Type_Lieu.MINE) {
+                }
+                else if (this.parcelle.getLieu().getType_Lieu() == Lieu.Type_Lieu.MINE) {
                     Mine mine = (Mine) this.parcelle.getLieu();
-
                     //Vérifier que les spécialités conïncident
                     if (this.specialite != mine.getSpecialite()) {
-                        Alert probleme_type_de_minerai = new Alert(Alert.AlertType.WARNING);
-                        probleme_type_de_minerai.setTitle("Problème de type de minerai.");
-                        probleme_type_de_minerai.setContentText("Types de minerai imcompatibles :" +
-                                "\n|| Specialité du Robot = " + this.specialite +
-                                "\n|| Spécialité de la Mine = " + mine.getSpecialite());
-                        probleme_type_de_minerai.show();
+                        if (testmode==false) {
+                            Alert probleme_type_de_minerai = new Alert(Alert.AlertType.WARNING);
+                            probleme_type_de_minerai.setTitle("Problème de type de minerai.");
+                            probleme_type_de_minerai.setContentText("Types de minerai imcompatibles :" +
+                                    "\n|| Specialité du Robot = " + this.specialite +
+                                    "\n|| Spécialité de la Mine = " + mine.getSpecialite());
+                            probleme_type_de_minerai.show();
+                        }
                         return false;
                     }
                     // Vérifier que la mine n'est pas vide
                     else if (mine.getQuantite_minerai_restant()==0){
-                        Alert probleme_mine_vide = new Alert(Alert.AlertType.WARNING);
-                        probleme_mine_vide.setTitle("La mine " + mine.getNom() + " est pleine.");
-                        probleme_mine_vide.setContentText("Attention, la mine " + mine.getNom() + " est déjà vide.");
-                        probleme_mine_vide.show();
+                        if (testmode==false) {
+                            Alert probleme_mine_vide = new Alert(Alert.AlertType.WARNING);
+                            probleme_mine_vide.setTitle("La mine " + mine.getNom() + " est pleine.");
+                            probleme_mine_vide.setContentText("Attention, la mine " + mine.getNom() + " est déjà vide.");
+                            probleme_mine_vide.show();
+                        }
+                        return false;
                     // Vérifier en fonction de la quantité de minerai restant dans la mine
-                    } else if (mine.getQuantite_minerai_restant() >= this.capacite_extraction) {
+                    }
+                    else if (mine.getQuantite_minerai_restant() >= this.capacite_extraction) {
                         // Vérifier la capacité restante dans le robot
                         int capacite_restante_robot = this.capacite_minerai_max - this.quantite_minerai;
                         if (capacite_restante_robot < this.capacite_extraction) {
@@ -416,7 +465,8 @@ public class Robot {
                             mine.setQuantite_minerai_restant(mine.getQuantite_minerai_restant() - capacite_restante_robot);
                             this.setNombre_action(1);
                             return true;
-                        } else {
+                        }
+                        else {
                             this.setQuantite_minerai(this.quantite_minerai + this.capacite_extraction);
                             mine.setQuantite_minerai_restant(mine.getQuantite_minerai_restant() - this.capacite_extraction);
                             this.setNombre_action(1);
@@ -439,19 +489,23 @@ public class Robot {
                     }
                 }
             }
-            else{
-                Alert probleme_robot_plein = new Alert(Alert.AlertType.WARNING);
-                probleme_robot_plein.setTitle("Robot plein.");
-                probleme_robot_plein.setContentText("Attention, le robot " + this.getNom() + " est déjà plein !");
-                probleme_robot_plein.show();
+            else {
+                if (testmode==false) {
+                    Alert probleme_robot_plein = new Alert(Alert.AlertType.WARNING);
+                    probleme_robot_plein.setTitle("Robot plein.");
+                    probleme_robot_plein.setContentText("Attention, le robot " + this.getNom() + " est déjà plein !");
+                    probleme_robot_plein.show();
+                }
                 return false;
             }
         }
         else {
-            Alert probleme_double_action = new Alert(Alert.AlertType.WARNING);
-            probleme_double_action.setTitle("Deuxième action du tour.");
-            probleme_double_action.setContentText("Attention, le robot a déjà effectué son action de jeu !");
-            probleme_double_action.show();
+            if (testmode==false) {
+                Alert probleme_double_action = new Alert(Alert.AlertType.WARNING);
+                probleme_double_action.setTitle("Deuxième action du tour.");
+                probleme_double_action.setContentText("Attention, le robot a déjà effectué son action de jeu !");
+                probleme_double_action.show();
+            }
             return false;
         }
         return false;
