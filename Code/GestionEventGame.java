@@ -1,4 +1,4 @@
-package com.example.java301fx;
+package com.example.sae_robots_mineur;
 
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -73,7 +73,7 @@ public class GestionEventGame implements EventHandler {
         } else if (event.getSource().toString().contains("b_piocher") && event.getEventType().equals(MouseEvent.MOUSE_CLICKED)) {
             //Déplacement du robot
             this.jeu.getCurseur_robot().getRobot().getParcelle().getParcelleGUI().getChildren().remove(this.jeu.getCurseur_robot().getSkin());
-            this.jeu.getCurseur_robot().getRobot().collecter();
+            this.jeu.getCurseur_robot().getRobot().collecter(false);
             this.jeu.getCurseur_robot().getRobot().getParcelle().getParcelleGUI().getChildren().add(this.jeu.getCurseur_robot().getSkin());
 
             // Changement des informations
@@ -83,7 +83,7 @@ public class GestionEventGame implements EventHandler {
         } else if (event.getSource().toString().contains("b_deposer") && event.getEventType().equals(MouseEvent.MOUSE_CLICKED)) {
             //Déplacement du robot
             this.jeu.getCurseur_robot().getRobot().getParcelle().getParcelleGUI().getChildren().remove(this.jeu.getCurseur_robot().getSkin());
-            this.jeu.getCurseur_robot().getRobot().deposer();
+            this.jeu.getCurseur_robot().getRobot().deposer(false);
             this.jeu.getCurseur_robot().getRobot().getParcelle().getParcelleGUI().getChildren().add(this.jeu.getCurseur_robot().getSkin());
 
             // Changement des informations
@@ -105,7 +105,7 @@ public class GestionEventGame implements EventHandler {
             // piocher
             if (((KeyEvent) event).getCode().equals(this.jeu.getGestionEventLauncher().getFenetre_commandes().getPiocher())){
                 this.jeu.getCurseur_robot().getRobot().getParcelle().getParcelleGUI().getChildren().remove(this.jeu.getCurseur_robot().getSkin());
-                this.jeu.getCurseur_robot().getRobot().collecter();
+                this.jeu.getCurseur_robot().getRobot().collecter(false);
                 this.jeu.getCurseur_robot().getRobot().getParcelle().getParcelleGUI().getChildren().add(this.jeu.getCurseur_robot().getSkin());
 
                 // Changement des informations
@@ -115,7 +115,7 @@ public class GestionEventGame implements EventHandler {
             // déposer
             else if (((KeyEvent) event).getCode().equals(this.jeu.getGestionEventLauncher().getFenetre_commandes().getDeposer())){
                 this.jeu.getCurseur_robot().getRobot().getParcelle().getParcelleGUI().getChildren().remove(this.jeu.getCurseur_robot().getSkin());
-                this.jeu.getCurseur_robot().getRobot().deposer();
+                this.jeu.getCurseur_robot().getRobot().deposer(false);
                 this.jeu.getCurseur_robot().getRobot().getParcelle().getParcelleGUI().getChildren().add(this.jeu.getCurseur_robot().getSkin());
 
                 // Changement des informations
