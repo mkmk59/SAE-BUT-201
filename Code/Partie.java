@@ -104,8 +104,6 @@ public class Partie {
             this.robots.add(robot_Or);
         }
 
-        System.out.println(this.robots.size());
-
         // Insertions des robots extracteur de Nickel
         int nb_robot_Ni_place = 1;
         while (nb_robot_Ni_place <= nb_robot_Ni) {
@@ -125,8 +123,6 @@ public class Partie {
             nb_robot_Ni_place++;
             this.robots.add(robot_Ni);
         }
-
-        System.out.println(this.robots.size());
 
         // Insertion des plans d'eau
         int nb_plan_d_eau = generateur.nextInt(2, 11);
