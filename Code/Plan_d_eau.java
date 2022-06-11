@@ -1,4 +1,4 @@
-package com.example.java301fx;
+package com.example.sae_robots_mineur;
 
 public class Plan_d_eau extends Lieu{
     /* Attribut */
