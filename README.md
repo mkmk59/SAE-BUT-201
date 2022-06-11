@@ -1,7 +1,8 @@
 # SAE-BUT-201
 
- <li><a href="#Git hub de la SAE201-202, BUT Informatique 1|semestre 2.">SAE</a></li>
-Participant :
+### Git hub de la SAE201-202, BUT Informatique 1|semestre 2.
+
+###Participant :
 
 Khalil BOUCHAMA
 
@@ -12,3 +13,7 @@ Raphael GHARIBYAN
 Mark GYURJYAN
 
 --------------------------------------------------
+
+### Utilisation du code : 
+
+
