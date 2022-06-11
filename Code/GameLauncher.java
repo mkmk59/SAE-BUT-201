@@ -1,4 +1,4 @@
-package com.example.java301fx;
+package com.example.sae_robots_mineur;
 
 import javafx.application.Application;
 import javafx.geometry.Pos;
