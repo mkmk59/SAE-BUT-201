@@ -1,11 +1,8 @@
 package com.example.sae_robots_mineur;
 
-import javafx.beans.property.ReadOnlyObjectProperty;
+import com.example.sae_robots_mineur_JFX.RobotGUI;
 import javafx.scene.control.Alert;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
-import java.io.File;
 import java.util.Random;
 
 public class Robot {
@@ -143,14 +140,13 @@ public class Robot {
                     this.parcelle.getParcelleGUI().setRobotGUI(this.robotGUI);
                 }
                 return true;
-            } else if ((parcelle.getLieu().getType_Lieu() == Lieu.Type_Lieu.PLAN_D_EAU)) {
+            } else if ((parcelle.getLieu().getType_Lieu() == Lieu.Type_Lieu.PLAN_D_EAU) && testmode==false) {
                 Alert probleme_plan_deau = new Alert(Alert.AlertType.WARNING);
                 probleme_plan_deau.setTitle("Tentative de parcour d'un plan d'eau");
                 probleme_plan_deau.setContentText("Attention, plan d'eau !");
                 probleme_plan_deau.show();
                 return false;
-            } else if (parcelle.isPresence_robot()){
-                // Ne pas afficher d'erreur à l'initialisation de la partie
+            } else if (parcelle.isPresence_robot() && testmode==false){
                     Alert parcelle_occupee = new Alert(Alert.AlertType.WARNING);
                     parcelle_occupee.setTitle("Parcelle occupée");
                     parcelle_occupee.setContentText("Attention, un robot est déjà présent sur la parcelle !");
