@@ -25,6 +25,8 @@ Le dossier image devra se situer dans le dossier **sae_robot_mineur/src/image**
 contient le jeu final avec un affichage console.
 
 3. Les tests JUnit - https://github.com/mkmk59/SAE-BUT-201/tree/main/Code/tests/com/example/sae_robots_mineur
-sont dans le dossier Code
+sont dans le dossier Code.
 
-4. Un fichier **Balsamiq** est présent dans le main du git, c'est le maquettage de notre affichage du jeu en JavaFX
+4. Un fichier **Balsamiq** est présent dans le main du git, c'est le maquettage de notre affichage du jeu en JavaFX.
+
+5. Des fichiers **UML** se trouvent dans le main du git, il sagit là de diagrammes de classes qui ont servis à l'élaboration du code.
